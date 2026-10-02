@@ -55,10 +55,21 @@ Save live unless the person asked for a step before it goes live. Versions are i
 - `keepPhotoMetadata: true` — keeps every photograph in this save (JPEG, PNG, WebP, GIF, AVIF, HEIC; staged ones too) exactly as sent. Without it, each is kept without where it was taken — GPS and place names — and without the camera's and lens's serials and the owner's name; orientation, date and camera model stay, and the pictures are never re-encoded. Pass it only when the person wants the location published; each file in the answer says `photoMetadata: "removed"` or `"kept"`. A file copied with `from` is not read again.
 - `validate: true` — runs every check and answers as the save would, in the same words, saving nothing.
 
+## Settings as a file: `artifact.json`
+
+`artifact.json` at the root of a save's files — sent inline, staged, inside a zip, or written by a change — is read as the artifact's settings and kept nowhere: no version or draft holds it and no address serves it. Any other path is an ordinary file. It is one JSON object, at most 64 KB, every key optional:
+
+- `name`, `description` (one line; `null` clears it), `tags` (the whole list) — on a new artifact the save's own fields; on an existing one, the change `update_artifact_settings` makes.
+- `library` (`true`/`false`), `room` (`on`/`off`), `crate` (`shown`/`hidden`), `agentPolicy` (`workspace`, `approval`, `live`) — set as `update_artifact_settings` sets them; on a new artifact, once it is made.
+- `access` and `preview`, in the shapes the save takes — a new artifact's own; on an existing one they must equal what is stored, and a different value is refused naming `update_access`, so a file never changes who can open it.
+
+A key left out leaves its setting as it is. A key equal to what is stored changes nothing and needs nothing, so a file read back and saved again changes nothing. A key that changes something needs what `update_artifact_settings` needs — Edit for the words, the tags and the library, the owner for the room, the crate and the agent policy — and, from a credential, its `manage` scope on an existing artifact. On a new artifact a field passed both in the save and in the file must agree. The file is applied after the version is written or found unchanged, so a file sent with unchanged content changes the settings and makes no version (`noop: true`). The answer's `settings` lists each change in a sentence, empty when there was none; with `validate: true` it names the keys the file would change, and nothing changes.
+
+Refused whole, writing nothing: the file in a save `as: "draft"` (settings are the artifact's, never the draft's); a file that is not one JSON object; a key outside the list above, named, with the keys it takes — theme, domain and provenance are not among them yet; a value its setting refuses, in that setting's words; a change the saver may not make. A backup's artifact folder holds the file in this shape, so that folder saved back as it stands changes nothing.
+
 ## Things refused by name
 
-- `artifact.json` at the root of the files is reserved for a workspace's settings file; name it anything else.
-- An existing artifact's `name`, `description`, `tags`, `kind`, `slug` and `workspace` are not a save's to change: settings change with `update_artifact_settings`, access and the link preview with `update_access`. A save may pass the `access` and `preview` already stored; a different one is refused.
+- An existing artifact's `name`, `description`, `tags`, `kind`, `slug` and `workspace` are not a save's fields to change: settings change with `update_artifact_settings` or an `artifact.json` (above), access and the link preview with `update_access`. A save may pass the `access` and `preview` already stored; a different one is refused.
 - An unknown field in a document is refused, naming the nearest field that exists.
 
 ## Description and tags
