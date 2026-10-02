@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Your account or billing
+    url: https://23artifacts.com/support
+    about: Questions about your 23artifacts account, plan or billing, or anything you'd rather not post in public.
+  - name: A security problem
+    url: https://23artifacts.com/.well-known/security.txt
+    about: Report it privately to security@23artifacts.com, never in an issue.

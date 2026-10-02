@@ -1,0 +1,20 @@
+{
+  "name": "23artifacts",
+  "interface": {
+    "displayName": "23artifacts"
+  },
+  "plugins": [
+    {
+      "name": "23artifacts",
+      "source": {
+        "source": "local",
+        "path": "./"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

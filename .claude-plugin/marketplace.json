@@ -1,0 +1,16 @@
+{
+  "name": "23artifacts",
+  "description": "The 23artifacts plugin, from 23made.",
+  "owner": {
+    "name": "23made",
+    "email": "hello@23artifacts.com",
+    "url": "https://23artifacts.com"
+  },
+  "plugins": [
+    {
+      "name": "23artifacts",
+      "source": "./",
+      "description": "Publish what you make as a live, private-by-default address — a page with its images, video, sound and scripts, a deck, or a single file — share it with exactly the people you choose, and read and answer their comments."
+    }
+  ]
+}

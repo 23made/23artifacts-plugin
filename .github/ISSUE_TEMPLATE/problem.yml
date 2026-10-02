@@ -1,0 +1,44 @@
+name: A problem with the plugin
+description: Something in the plugin, its skill or its commands didn't work, or didn't work the way you expected.
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for reporting it. This repository is public, so leave out anything private. For your account or billing, use https://23artifacts.com/support.
+  - type: dropdown
+    id: client
+    attributes:
+      label: Which assistant?
+      options:
+        - ChatGPT
+        - Codex
+        - Claude Code
+        - Claude (claude.ai, the desktop app or Cowork)
+        - Another assistant
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Plugin version
+      description: The `version` in plugin.json, or what your assistant's plugin list shows. Leave it empty if you can't find it.
+  - type: textarea
+    id: asked
+    attributes:
+      label: What you asked
+      description: What you asked your assistant to do, or the command you ran.
+    validations:
+      required: true
+  - type: textarea
+    id: happened
+    attributes:
+      label: What happened
+      description: What the assistant did or said instead, with any error message.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected
+    validations:
+      required: true
