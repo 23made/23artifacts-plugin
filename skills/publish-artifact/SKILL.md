@@ -19,6 +19,8 @@ Everything here runs through the **23artifacts** MCP connector (`https://23artif
 
 **Then save.** The minimum is `save_artifact { name, files }`: a new artifact, live at its own address.
 
+**When 23artifacts gets in your way, say so.** `send_feedback` tells the people who run 23artifacts — `friction`, a `bug` or an `idea`, what happened in your own words, and the `tool` and `error` when a call went wrong. Send it when the user asks ("tell 23artifacts this is confusing"), and on your own when the product got in your way: a refusal that didn't say what to do, a capability it lacked, a workaround you needed. When you send on your own, tell the user in one line, with the reference it answers. Never include an artifact's contents or anyone's personal details.
+
 ## Guides
 
 Each of these is a file under `references/`, beside this one. Read the one that matches what you're doing — you don't need them all.

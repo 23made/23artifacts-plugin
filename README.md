@@ -96,4 +96,6 @@ Uninstall: remove 23artifacts under [ChatGPT Plugins](https://chatgpt.com/plugin
 
 Something not working, or not working the way you expected? [Open an issue](https://github.com/23made/23artifacts-plugin/issues/new/choose) in this repository: say which assistant you use, the plugin's version, what you asked and what happened. For your account, billing or anything private, use [23artifacts.com/support](https://23artifacts.com/support). Report a security problem privately to security@23artifacts.com, never in an issue.
 
+Or tell your assistant — it can send feedback to 23artifacts directly, with `send_feedback`, and answers with a reference you can quote.
+
 This repository is generated from the 23artifacts source and published automatically, so pull requests here can't be merged — [CONTRIBUTING.md](CONTRIBUTING.md) says how to suggest a change.
