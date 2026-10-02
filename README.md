@@ -6,7 +6,7 @@
 
 This plugin gives your assistant three things:
 
-- **The 23artifacts connector**, at `https://23artifacts.com/mcp`: the tools that publish, find, show and share artifacts, and read and answer their comments. You sign in once with your 23artifacts account.
+- **The 23artifacts connector**, at `https://mcp.23artifacts.com/mcp`: the tools that publish, find, show and share artifacts, and read and answer their comments. You sign in once with your 23artifacts account.
 - **The publish-artifact skill**: how to publish well — your workspace's themes and its real screenshots and logos, access, decks, large sites and the comment loop. Its eleven guides load only when a task needs one.
 - **Three commands** where the host runs commands (Claude Code and Cowork): `/23artifacts:publish` publishes a file or folder from disk, `/23artifacts:show` shows an artifact, and `/23artifacts:comments` works through an artifact's comments. In chat they load as skills the assistant uses when they fit.
 
@@ -53,7 +53,7 @@ Plugins come with every paid plan (Pro, Max, Team and Enterprise).
 
 The marketplace keeps the plugin up to date. To install from a file instead, zip a clone of this repository from inside it — `zip -r ../23artifacts-plugin.zip . -x '.git/*'` — and choose **Customize → Plugins → Add → Upload plugin**.
 
-Without the plugin: **Customize → Connectors → Add custom connector**, URL `https://23artifacts.com/mcp`, then **Connect**; and for the skill, zip the `skills/publish-artifact` folder from inside `skills/` (so the archive's top level is `publish-artifact/`) and upload it under **Customize → Skills**.
+Without the plugin: **Customize → Connectors → Add custom connector**, URL `https://mcp.23artifacts.com/mcp`, then **Connect**; and for the skill, zip the `skills/publish-artifact` folder from inside `skills/` (so the archive's top level is `publish-artifact/`) and upload it under **Customize → Skills**.
 
 Uninstall: **Customize → Plugins → 23artifacts → Remove**, and remove the marketplace from its **⋯** menu. A connector added on its own is removed under **Customize → Connectors**.
 
@@ -72,7 +72,7 @@ A local copy works too: `codex plugin marketplace add /path/to/23artifacts-plugi
 The connector alone, without the skill:
 
 ```sh
-codex mcp add 23artifacts --url https://23artifacts.com/mcp
+codex mcp add 23artifacts --url https://mcp.23artifacts.com/mcp
 codex mcp login 23artifacts
 ```
 
@@ -85,7 +85,7 @@ Uninstall: `codex plugin remove 23artifacts@23artifacts` and `codex plugin marke
 Until 23artifacts is in ChatGPT's Plugins Directory:
 
 1. **Settings → Security and login → Developer mode**, on.
-2. Open [ChatGPT Plugins](https://chatgpt.com/plugins), select **+**, name it 23artifacts, enter `https://23artifacts.com/mcp` as the MCP server URL with OAuth, and create it. Sign in as above. Its tools are then available in your chats.
+2. Open [ChatGPT Plugins](https://chatgpt.com/plugins), select **+**, name it 23artifacts, enter `https://mcp.23artifacts.com/mcp` as the MCP server URL with OAuth, and create it. Sign in as above. Its tools are then available in your chats.
 3. For the skill as well, in the ChatGPT desktop app: add this repository as a marketplace with the `codex plugin marketplace add` line above (the app reads the marketplaces Codex is configured with), restart the app, open the Plugins Directory, choose the 23artifacts marketplace and install the plugin.
 
 A workspace admin can then share it inside the workspace: [ChatGPT Plugins](https://chatgpt.com/plugins) → **Personal** → the plugin's **⋯** → **Publish**, and choose the roles that get it. That never lists it publicly.

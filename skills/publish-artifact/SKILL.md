@@ -9,7 +9,7 @@ Publishes the artifact you're working on at a live address and returns it — an
 
 ## The connector
 
-Everything here runs through the **23artifacts** MCP connector (`https://23artifacts.com/mcp`). If its tools aren't available, tell the user to add the connector once — they'll be walked through signing in the first time it's used.
+Everything here runs through the **23artifacts** MCP connector (`https://mcp.23artifacts.com/mcp`). If its tools aren't available, tell the user to add the connector once — they'll be walked through signing in the first time it's used.
 
 ## Read this first, in this order
 

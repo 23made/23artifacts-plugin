@@ -3,7 +3,7 @@
   "mcpServers": {
     "23artifacts": {
       "type": "streamable-http",
-      "url": "https://23artifacts.com/mcp"
+      "url": "https://mcp.23artifacts.com/mcp"
     }
   }
 }
