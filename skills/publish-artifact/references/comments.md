@@ -42,6 +42,8 @@ To attach an annotation when writing a comment, pass `ink` — the stroke docume
 an image and not markup. Coordinates are per-mille of the box drawn in, so a mark
 lands in the same place on any screen.
 
+**What a stroke means.** Read an annotation's shape by the vocabulary people draw with, and draw by it yourself: a **closed loop** is *this thing* — what it goes round is what the comment is about; an **arrow** is a direction — move this there, or look at what it points to; a **cross** (or a slash) through something is *delete it*. It is a way of reading, not a field: nothing on the comment says which shape it is, so read it from the points, with the comment's words deciding when the shape is unclear. To see the marks on the page, ask for a picture of that version (`get_artifact` with `version`) and lay the strokes over it — no rendered image of a mark is ever stored.
+
 ## Reading the conversation
 
 `list_comments {artifact, version?, q?, since?, cursor?}` is the whole conversation on an artifact in one call: the threads you may see (visibility is enforced server-side), each comment with its anchor, the version it was left on and its thread's status; the recordings, each with the start of its words; the work items and who holds each; and the versions saved — plus **`seq`, the conversation's head**. `version` is a number, `"live"`, or `"all"` (the default). The threads come a page at a time, each answer held to about 15,000 tokens: `nextCursor` is set while more remain — pass it as `cursor`, with the same `version` and `q`, for the next page; `null` means you have them all.
