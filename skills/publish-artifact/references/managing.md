@@ -6,7 +6,7 @@ router: Finding, versions, state, settings, the log, workspaces.
 
 # Managing
 
-Every tool that acts on an artifact takes `artifact`: its address (`https://<id>.23a.so`, or the long address), its identifier (`<id>`) or its slug — whichever you hold. An address or an identifier resolves first, a slug second. A share link you were given (`…/?share=<token>`) is an address too: it opens the artifact for that call with the link's role, so pass it on every call about that artifact. Someone outside the workspace reaches an artifact exactly as its access list lets them — their address or domain on it, a share link — and nothing else of that workspace. Every tool that acts in a workspace takes `workspace`, its handle; left out, the person's own.
+Every tool that acts on an artifact takes `artifact`: its address (`https://<id>.23a.so`), its identifier (`<id>`) or its key — whichever you hold. An address or an identifier resolves first, a key second. A key is looked up only in the workspace the call acts in — `workspace` where the tool takes it, else a credential's own, else the person's own — and names nothing anywhere else, so for an artifact of another workspace use its address or its identifier. An older link on the long domain still names its artifact. A share link you were given (`…/?share=<token>`) is an address too: it opens the artifact for that call with the link's role, so pass it on every call about that artifact. Someone outside the workspace reaches an artifact exactly as its access list lets them — their address or domain on it, a share link — and nothing else of that workspace. Every tool that acts in a workspace takes `workspace`, its handle; left out, the person's own.
 
 ## Offline, live or deleted
 
@@ -14,7 +14,7 @@ An artifact is always one of three:
 
 - **live** — its address serves one version;
 - **offline** — its address serves nothing ("nothing is live here right now"); its versions, draft, comments, room, log, settings and access are untouched, and a version's own address still opens for people who can edit it;
-- **deleted** — its address and every version's say it is gone; it leaves every list unless asked for with `state:deleted`, and takes no save, setting or comment until restored. Thirty days after deletion it is purged for good, and its slug stays reserved.
+- **deleted** — its address and every version's say it is gone; it leaves every list unless asked for with `state:deleted`, and takes no save, setting or comment until restored. It keeps its key through those thirty days, so a save by that key is refused until it is restored; thirty days after deletion it is purged for good, its key freed, and its address still says it is gone.
 
 Every read carries `state` as one of those three words, with `hasDraft` and `hasStaged` beside it.
 
@@ -23,11 +23,11 @@ Every read carries `state` as one of those three words, with `hasDraft` and `has
 
 ## Finding
 
-`list_artifacts { workspace?, q?, tz?, limit?, cursor?, fields? }` finds a workspace's artifacts of every kind. Each row: address, identifier, slug, name, description, kind, state, the live version, whether it has a draft and a staged version, whether it is in the library, `whoCanOpen` (every way in, as one sentence), tags, when made and touched. It never returns content or a picture.
+`list_artifacts { workspace?, q?, tz?, limit?, cursor?, fields? }` finds a workspace's artifacts of every kind. Each row: address, identifier, name, description, kind, state, the live version, whether it has a draft and a staged version, whether it is in the library, `whoCanOpen` (every way in, as one sentence), tags, when made and touched. It never returns content or a picture.
 
-**One question finds them.** `q` takes words, quoted phrases and `field:value` terms in one string. Every word must match the name, slug, description or tags as a whole word or its beginning (`deploy` finds *deployment*); a quoted phrase must appear with its words adjacent and in order. A term narrows by one fact:
+**One question finds them.** `q` takes words, quoted phrases and `field:value` terms in one string. Every word must match the name, key, description or tags as a whole word or its beginning (`deploy` finds *deployment*); a quoted phrase must appear with its words adjacent and in order. A term narrows by one fact:
 
-- `name:`, `slug:`, `description:`, `tag:`, `text:` (the artifact's own words alone — every page of a site, a deck's slides, a theme's guidance);
+- `name:`, `key:`, `description:`, `tag:`, `text:` (the artifact's own words alone — every page of a site, a deck's slides, a theme's guidance);
 - `kind:` — `page`, `deck`, `markdown`, `file`, `image`, `video`, `sound`, `font`, `theme`; `format:` — the format a one-file kind was recognised as (`png`, `jpg`, `mp4`, `woff2`, …);
 - `in:library` — kept in the workspace's library (see `library`); a listing holds only what is made to be shown unless the question asks for material with `in:`, `kind:` or `format:`;
 - `state:` — `offline`, `live` or `deleted` (inside the thirty days); with no `state:` term nothing deleted is listed;
@@ -36,9 +36,9 @@ Every read carries `state` as one of those three words, with `hasDraft` and `has
 - `made:`, `touched:` — a span: `7d`, `30d`, `90d`, `1y`, a month `2026-09`, a day `2026-09-01`, or `2026-09-01..2026-09-18`; `after:`, `before:` — a day, applied to when it was touched;
 - `sort:` — `touched`, `made`, `name`, `size`, `match`.
 
-Comma-separated values mean any of them (`tag:brand,launch`); the same field twice means both (`tag:brand tag:launch`). A minus directly before a term, a word or a phrase leaves it out: `-tag:old`, `-kind:deck,markdown`, `-draft`, `-"launch deck"`. `sort:` cannot be left out, and a term with its own value left out holds for nothing, which the answer says in `contradiction`. An unknown field is refused naming the nearest; `state:draft`, `state:ready`, `in:<words>` and `library:` are refused naming what replaced them (`state:offline`, `has:staged`, `text:`, `in:library` or `tag:`). Pass `tz` (an IANA zone) so a day is the person's day. Every term goes inside `q`; a separate parameter for one is refused by name.
+Comma-separated values mean any of them (`tag:brand,launch`); the same field twice means both (`tag:brand tag:launch`). A minus directly before a term, a word or a phrase leaves it out: `-tag:old`, `-kind:deck,markdown`, `-draft`, `-"launch deck"`. `sort:` cannot be left out, and a term with its own value left out holds for nothing, which the answer says in `contradiction`. An unknown field is refused naming the nearest; `state:draft`, `state:ready`, `in:<words>`, `library:` and `slug:` are refused naming what replaced them (`state:offline`, `has:staged`, `text:`, `in:library`, `tag:` or `key:`). Pass `tz` (an IANA zone) so a day is the person's day. Every term goes inside `q`; a separate parameter for one is refused by name.
 
-The answer carries `facets` — for kind, access, state, has and tag, every value the question would hold with that one fact unset, with counts; read them before guessing at values — and `question` (what was understood) and `sort`. Pages by `limit` (default 50, at most 100) and `nextCursor`, passed back as `cursor`; a cursor is good only for the sort it was cut under. A busy workspace lists to tens of KB: pass `fields` to keep only the keys you need (the address, identifier and slug always come back).
+The answer carries `facets` — for kind, access, state, has and tag, every value the question would hold with that one fact unset, with counts; read them before guessing at values — and `question` (what was understood) and `sort`. Pages by `limit` (default 50, at most 100) and `nextCursor`, passed back as `cursor`; a cursor is good only for the sort it was cut under. A busy workspace lists to tens of KB: pass `fields` to keep only the keys you need (the address and identifier always come back).
 
 ## Reading
 
@@ -49,14 +49,15 @@ The answer carries `facets` — for kind, access, state, has and tag, every valu
 
 `update_artifact_settings { artifact, … }` changes an artifact's settings — never its content, its state or its access; whatever is left out stays:
 
-- `name` (the slug and address never change), `description` (one line; empty clears it);
+- `name` (the address never changes), `description` (one line; empty clears it);
+- `key` — its key for tools: set or renamed, unique in its workspace and never another artifact's identifier there; `null` clears it. Renaming one moves no link;
 - `tags` replaces the list, or `addTags` and `removeTags` change it;
 - `library` — `true` puts it in the workspace's library, `false` takes it out;
 - `room` — `on`, `off` (keeps what it holds) or `wipe`; `crate` — `shown` or `hidden`;
 - `agentPolicy` — `workspace` (as the workspace says), `approval` or `live`: whether an agent's work goes live without a person;
 - `previewImage: "retry"` — one more attempt at a live version's preview image that was given up; the owner's.
 
-Pass `artifacts` — up to 50 — instead of `artifact` to change the settings several can share: tags, the library, the room, the crate, the agent policy. A name or a description is one artifact's. Renaming, describing, tagging and the library need Edit; the rest are the owner's; nothing changes unless all of it may, on every artifact named. The same settings travel with the files as `artifact.json` at a save's root (see `publishing`). The answer is the settings after, per artifact, each change in a sentence — an open room is writable by anyone who can open the artifact.
+Pass `artifacts` — up to 50 — instead of `artifact` to change the settings several can share: tags, the library, the room, the crate, the agent policy. A name, a key or a description is one artifact's. Renaming, keying, describing, tagging and the library need Edit; the rest are the owner's; nothing changes unless all of it may, on every artifact named. The same settings travel with the files as `artifact.json` at a save's root (see `publishing`). The answer is the settings after, per artifact, each change in a sentence — an open room is writable by anyone who can open the artifact.
 
 ## The log
 
@@ -77,7 +78,7 @@ One question serves all three, `q` in the log's terms: `when:` (`1h`, `6h`, `24h
 `get_workspace { workspace? }` / `update_workspace { workspace?, handle?, defaultAccess?, confirmReach?, defaultTheme?, agentPolicy?, members? }` — the workspace as its page shows it: its plan against each limit, its defaults, its members and waiting invitations, and the credentials acting in it — and changing them.
 
 - `handle` is the personal workspace's short name, like a username — how its work is credited, mentioned and found. No address carries it: every artifact's address is its own identifier, so a new handle moves no link. It changes at most once a day, and reserved names are refused; an organization's is set by an owner or admin on its page.
-- `defaultTheme` — the theme new artifacts are built in, by its slug or address (`@<version>` to pin), or `null` to leave the design to the agent. See `themes`.
+- `defaultTheme` — the theme new artifacts are built in, by its address, identifier or key — the workspace's own first, then ours — (`@<version>` to pin), or `null` to leave the design to the agent. See `themes`.
 - `members` invites (`invite: [{email, role}]`, role `member` or `admin`), removes (`remove: [email]`), changes roles (`roles: [{email, role}]`, `owner`, `admin` or `member`) and cancels invitations (`cancel: [email]`) — the owners' and admins' act; only an owner makes or touches an owner, and a workspace keeps one. An invitee joins only when they accept the email, and an account sends at most 50 invitations a day. Confirm an invitation's address with the person before sending it.
 - `defaultAccess` is the list a new artifact starts with and the workspace's position on closing comments — the `access` guide has both, and the reach a position is answered with first.
 

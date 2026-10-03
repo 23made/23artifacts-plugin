@@ -120,7 +120,7 @@ You can't see the render, so lean on what you can:
 { "id":"htitle","type":"text","x":96,"y":460,"w":1000,"h":180,"html":"On top of the photo.","fontSize":76,"fontWeight":800,"color":"#fff","align":"left","valign":"top","lineHeight":1.05,"rotation":0,"opacity":1,"fx":{"enter":"fade-up"} }
 ```
 Reference the image with `"asset:hero"` and put the material in `doc.assets`
-under `hero` — `"hero": "asset:dashboard-dark"`, the material's slug or
+under `hero` — `"hero": "asset:dashboard-dark"`, the material's key or
 identifier; see the `library` guide for finding it. The key becomes real bytes
 when a version is saved, so the saved file stays whole.
 

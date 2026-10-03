@@ -1,6 +1,6 @@
 ---
 title: Publishing
-summary: save_artifact — whole content or changes on a base, live, staged or into the draft; slugs, workspaces, versions, copies, notes and the files a save leaves out. Read before your first save.
+summary: save_artifact — whole content or changes on a base, live, staged or into the draft; keys, workspaces, versions, copies, notes and the files a save leaves out. Read before your first save.
 router: save_artifact: files or changes, live, staged or draft.
 ---
 
@@ -17,15 +17,19 @@ Every change to what an artifact holds is one call, `save_artifact`. It makes a 
    - The server is remote and cannot read your sandbox or the person's disk: every file arrives inline, staged (`{ path, upload }`, see `large-sites`), copied from material (`{ path, from }`, see `library`), or as a zip (`{ archive: "<base64>" }`, expanded on arrival).
    - A page needs an entry page: `index.html`, or `entrypoint` naming another of its paths.
 2. Call `save_artifact { name, files }`. Also, only when a save makes an artifact:
-   - `slug` — its name in its workspace and in its long address; derived from `name` when left out, and fixed for good. A slug already taken is refused, never saved over, and a deleted artifact's slug stays reserved.
+   - `key` — a name for tools to find it by (`docs-site`): one to sixty-three lowercase letters, digits and hyphens, unique in its workspace, and part of no address, link preview, title or share link. Left out, the artifact has none — nothing is derived from `name`. Give one whenever you will save it again (see *Saving by key*); set, rename or clear it later with `update_artifact_settings { artifact, key }` (`null` clears).
    - `workspace` — a handle, to make it in a workspace the person belongs to; their own when left out.
    - `kind` — `page`, `deck`, `markdown`, `file`, or a material kind (`image`, `video`, `sound`, `font`, `theme`). Left out, it is recognised from the content: a `document` is a deck, files with an entry page a page, one markdown file markdown, any other single file a file. Material is made only by naming its kind (see `library`). The kind is fixed at birth: a later save whose content does not fit it is refused naming the kind.
    - `description` (one line, at most 280 characters), `tags`, `access` and `preview` (see below).
-3. Give the person the `address` from the answer: `<id>.23a.so`, fixed from the moment the artifact exists. The answer also carries `id` (the identifier), `slug`, `kind`, `state`, `version` (`number`, its own pinned `address`, `live`, `staged`), `files` (per path its `bytes` and `sha256` — compare them with your own files instead of fetching them back), `whoCanOpen` (every way in, as one sentence) and `dashboardUrl`. `next` says what comes next: the preview image being made, a staged version one `set_artifact_state` away, the workspace's default theme when the save did not use it.
+3. Give the person the `address` from the answer: `<id>.23a.so`, fixed from the moment the artifact exists — its only address. The answer also carries `id` (the identifier), `key` when it has one, `kind`, `state`, `version` (`number`, its own pinned `address`, `live`, `staged`), `files` (per path its `bytes` and `sha256` — compare them with your own files instead of fetching them back), `whoCanOpen` (every way in, as one sentence) and `dashboardUrl`. `next` says what comes next: the preview image being made, a staged version one `set_artifact_state` away, the workspace's default theme when the save did not use it.
+
+## Saving by key
+
+`save_artifact { key, files }` names the artifact by its key in the workspace the save acts in (`workspace`, else a credential's own, else the person's own). When no artifact there holds that key, the save makes one carrying it; when one does, the save is that artifact's next version. So an agent, a CI job or a command line that always passes the same key makes its artifact once and versions it on every run after — no need to look it up first, and no save by key is ever refused as already taken. On a save that versions, `name`, `description` and `tags` are optional; any sent are left as stored and the answer's `next` says so (change them with `update_artifact_settings`), and a `kind` the artifact is not is refused. A key held by a deleted artifact is refused until it is restored (`set_artifact_state`), and is freed when the artifact is purged. A key names nothing outside its workspace.
 
 ## A new version of an artifact
 
-Pass `artifact` — its address, its identifier or its slug, whichever you hold — and the content, in one of three forms:
+Pass `artifact` — its address, its identifier or its key, whichever you hold — and the content, in one of three forms:
 
 - **The whole of it:** `files` (or `document`, for a deck or a theme). The version holds exactly what you send. The answer's `leftOut` lists every path the version it replaces had and this one does not (the first 50, then `more`), so nothing is ever dropped without saying so; leaving out the entry page is refused unless you name a new `entrypoint`.
 - **Changes on a base:** `base` — a version number, `"live"` or `"draft"` — with `changes`, applied on the server; every file you do not name is carried over by digest, moving no bytes. A change is `{ path, content, encoding }` (written whole), `{ path, upload }`, `{ path, from }`, `{ path, remove: true }`, or `{ path, replace: { old, new, all? } }` — a text edit inside the file, where `old` must occur exactly once unless `all: true`. At most 2,000 changes. This is the way to change a few files of a big site: it cannot drop the rest.
@@ -45,13 +49,13 @@ Save live unless the person asked for a step before it goes live. Versions are i
 
 ## Copies and remixes
 
-`base: "<other artifact>@<version>"` (or `@live`), with no `artifact`, makes a **new** artifact from that version: pass `changes` (or a deck's `patch`) to remix it — which needs only that you can open it — or nothing, to duplicate it, which is its owner's. The new artifact records its source, and the source's source, and every read of it names them. `name` and `slug` name the copy as they name any new artifact.
+`base: "<other artifact>@<version>"` (or `@live`), with no `artifact`, makes a **new** artifact from that version: pass `changes` (or a deck's `patch`) to remix it — which needs only that you can open it — or nothing, to duplicate it, which is its owner's. The new artifact records its source, and the source's source, and every read of it names them. `name` and `key` name the copy as they name any new artifact; a key the workspace already holds is refused for a copy.
 
 ## What else a save takes
 
 - `note` — why this version exists, in your words, at most 2,000 characters; kept with the version and shown with it. A save into the draft takes none.
 - `work` — the work item this save answers (see `comments`). Any save you make while you hold work on the artifact is that work's save, named or not: where the artifact's agent policy needs approval, it is staged whatever `as` says, and waits for a person to make it live.
-- `theme` — a theme to copy in as `theme.css` (link it from your HTML): its slug or address, pinned with `@<version>` if you like; `"none"` says you chose none. A `theme.css` you send yourself wins. See `themes`.
+- `theme` — a theme to copy in as `theme.css` (link it from your HTML): its address, identifier or key (the workspace's own first, then ours), pinned with `@<version>` if you like; `"none"` says you chose none. A `theme.css` you send yourself wins. See `themes`.
 - `keepPhotoMetadata: true` — keeps every photograph in this save (JPEG, PNG, WebP, GIF, AVIF, HEIC; staged ones too) exactly as sent. Without it, each is kept without where it was taken — GPS and place names — and without the camera's and lens's serials and the owner's name; orientation, date and camera model stay, and the pictures are never re-encoded. Pass it only when the person wants the location published; each file in the answer says `photoMetadata: "removed"` or `"kept"`. A file copied with `from` is not read again.
 - `validate: true` — runs every check and answers as the save would, in the same words, saving nothing.
 
@@ -69,7 +73,7 @@ Refused whole, writing nothing: the file in a save `as: "draft"` (settings are t
 
 ## Things refused by name
 
-- An existing artifact's `name`, `description`, `tags`, `kind`, `slug` and `workspace` are not a save's fields to change: settings change with `update_artifact_settings` or an `artifact.json` (above), access and the link preview with `update_access`. A save may pass the `access` and `preview` already stored; a different one is refused.
+- An existing artifact's `name`, `description`, `tags`, `kind`, `key` and `workspace` are not a save's fields to change — a save naming it by `artifact` with any of them is refused (one reaching it by `key` keeps them as stored, above): settings change with `update_artifact_settings` or an `artifact.json` (above), access and the link preview with `update_access`. A save may pass the `access` and `preview` already stored; a different one is refused.
 - An unknown field in a document is refused, naming the nearest field that exists.
 
 ## Description and tags

@@ -13,7 +13,7 @@ without coming back to a model. It is saved, read and changed with the same
 tools as every artifact:
 
 - `save_artifact { name, kind: "deck", document }` — a new deck from a whole
-  document (`kind` may be left out: a document is a deck). `slug`, `workspace`,
+  document (`kind` may be left out: a document is a deck). `key`, `workspace`,
   `tags`, `description`, `access` and `preview` as for any new artifact; the
   answer says who can open it. `get_guide('deck-format')` has the document's
   every field and a minimal valid one to start from.
@@ -142,7 +142,8 @@ that makes the result look designed rather than merely coloured. See `themes`.
 ## Real images
 
 Reference material from a deck's `assets` map with an `asset:` key naming it
-by slug or identifier, pinned with `@<version>` if you like:
+by its key or identifier — the workspace's own first, then ours — pinned with
+`@<version>` if you like:
 
 ```json
 "assets": { "hero": "asset:dashboard-dark" }

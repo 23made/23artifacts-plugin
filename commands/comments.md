@@ -1,6 +1,6 @@
 ---
 description: Work through the comments people left on a 23artifacts artifact — read each thread, change the files it is about, save the new version, reply and resolve, then keep listening for more. Use when the user asks to handle, answer or act on feedback on something they published.
-argument-hint: "<artifact address, identifier or slug> [what to focus on]"
+argument-hint: "<artifact address, identifier or key> [what to focus on]"
 ---
 
 Work through the comments on a 23artifacts artifact: $ARGUMENTS

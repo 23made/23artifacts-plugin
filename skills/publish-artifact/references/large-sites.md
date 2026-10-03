@@ -51,10 +51,10 @@ goes through an upload address (below).
 
 Chunking a big tree through tool calls is slow; a shell POSTs it in one go:
 
-1. `create_credential { kind: "upload", artifact: "<its address, identifier or slug>" }` → an **upload address**, a capability URL scoped to that one artifact — a slug nobody holds yet makes a new artifact on its first save — expiring in minutes (`minutes`, default 30) and good for one save unless you ask for more (`saves`, at most 50). The URL is the whole credential: nothing to store, and losing it risks at most its saves to one artifact for a few minutes.
+1. `create_credential { kind: "upload", artifact: "<its address, identifier or key>" }` → an **upload address**, a capability URL scoped to that one artifact — a key nobody in the workspace holds yet makes a new artifact with that key on its first save — expiring in minutes (`minutes`, default 30) and good for one save unless you ask for more (`saves`, at most 50). The URL is the whole credential: nothing to store, and losing it risks at most its saves to one artifact for a few minutes.
 2. Build the same JSON `save_artifact` takes, less `artifact` (the address carries it), reading the files from disk, and POST it to the answer's `url`:
    `curl -X POST "$UPLOAD_URL" -H "Content-Type: application/json" -d @save.json`
-   — `/api/v1/artifacts/<slug>/versions?session=…` for an artifact that exists, `/api/v1/artifacts?session=…` (with `name` or `slug` in the body) for a new one. `changes` on a `base` work from a shell too, so a few changed files of a big site need not travel again.
+   — `/api/v1/artifacts/<artifact>/versions?session=…` for an artifact that exists, `/api/v1/artifacts?session=…` for a new one, whose body carries `name` and the address's `key` (the key may be left out; it is the address's). `changes` on a `base` work from a shell too, so a few changed files of a big site need not travel again.
 3. The same ceilings and the same answer as the tool, left-out paths included.
 4. Bigger single files (video and the like, up to 4 GB each): stage them with the resumable upload routes, the address's `?session=…` on every call — `POST /api/v1/uploads` `{ "filename", "size" }` → `{ uploadId, partSize }` (16 MB parts), `PUT /api/v1/uploads/<uploadId>/parts/<n>` per part (put a part again to resume), `POST /api/v1/uploads/<uploadId>/complete` — then name them in the save as `{ "path": "video.mp4", "upload": "<uploadId>" }`. The answer's `uploadsUrl` is that staging address.
 
