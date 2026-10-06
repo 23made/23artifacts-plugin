@@ -14,7 +14,7 @@ Every change to what an artifact holds is one call, `save_artifact`. It makes a 
    - `path` — the file's path within the site, e.g. `index.html`, `styles.css`, `img/logo.svg`. No leading slash, at most 1,024 characters.
    - Text files (HTML, CSS, JS, SVG, JSON, markdown): `encoding: "utf8"` (the default).
    - Binary files (PNG, JPEG, fonts, …): base64 of the bytes, `encoding: "base64"`.
-   - The server is remote and cannot read your sandbox or the person's disk: every file arrives inline, staged (`{ path, upload }`, see `large-sites`), copied from material (`{ path, from }`, see `library`), or as a zip (`{ archive: "<base64>" }`, expanded on arrival).
+   - The server is remote and cannot read your sandbox or the person's disk: every file arrives inline, staged (`{ path, upload }`, see `large-sites`), copied from material (`{ path, from }`, see `library`), or as a zip (`{ archive: "<base64>" }`, expanded on arrival). With a shell on the person's own machine and the command line installed (`23a whoami` answers), `23a publish <folder> --to <key> --json` reads the folder from disk and saves it for you — see `large-sites`.
    - A page needs an entry page: `index.html`, or `entrypoint` naming another of its paths.
 2. Call `save_artifact { name, files }`. Also, only when a save makes an artifact:
    - `key` — a name for tools to find it by (`docs-site`): one to sixty-three lowercase letters, digits and hyphens, unique in its workspace, and part of no address, link preview, title or share link. Left out, the artifact has none — nothing is derived from `name`. Give one whenever you will save it again (see *Saving by key*); set, rename or clear it later with `update_artifact_settings { artifact, key }` (`null` clears).
