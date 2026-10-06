@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "23artifacts",
-  "version": "0.1.22",
+  "version": "0.1.23",
   "description": "Publish what you make as a live, private-by-default address — a page with its images, video, sound and scripts, a deck, or a single file — share it with exactly the people you choose, and read and answer their comments.",
   "author": {
     "name": "23made",
