@@ -55,7 +55,7 @@ Save live unless the person asked for a step before it goes live. Versions are i
 
 - `note` — why this version exists, in your words, at most 2,000 characters; kept with the version and shown with it. A save into the draft takes none.
 - `work` — the work item this save answers (see `comments`). Any save you make while you hold work on the artifact is that work's save, named or not: where the artifact's agent policy needs approval, it is staged whatever `as` says, and waits for a person to make it live.
-- `theme` — a theme to copy in as `theme.css` (link it from your HTML): its address, identifier or key (the workspace's own first, then ours), pinned with `@<version>` if you like; `"none"` says you chose none. A `theme.css` you send yourself wins. See `themes`.
+- `theme` — a theme to copy in as `theme.css` (link it from your HTML; a markdown artifact's page links it for you and is drawn in the theme): its address, identifier or key (the workspace's own first, then ours), pinned with `@<version>` if you like; `"none"` says you chose none. A `theme.css` you send yourself wins. See `themes`.
 - `keepPhotoMetadata: true` — keeps every photograph in this save (JPEG, PNG, WebP, GIF, AVIF, HEIC; staged ones too) exactly as sent. Without it, each is kept without where it was taken — GPS and place names — and without the camera's and lens's serials and the owner's name; orientation, date and camera model stay, and the pictures are never re-encoded. Pass it only when the person wants the location published; each file in the answer says `photoMetadata: "removed"` or `"kept"`. A file copied with `from` is not read again.
 - `validate: true` — runs every check and answers as the save would, in the same words, saving nothing.
 
