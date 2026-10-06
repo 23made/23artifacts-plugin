@@ -106,17 +106,25 @@ address, or `{id, decline: true}`, which tells them nothing.
 the owner, whatever their role; existing threads stay readable. `"off"` opens it
 again. Either switches it on this artifact alone. A new artifact instead follows
 its workspace's position — `get_access` lists it under `following` — until it is
-switched here, and `"follow"` hands it back to the workspace. The sentence
-"People who can comment here see everyone's comments" is not switchable here
-yet. Each entry's `reason` says what its role gives and what a closed comment
-box takes from it.
+switched here, and `"follow"` hands it back to the workspace. Each entry's
+`reason` says what its role gives and what a closed comment box takes from it.
+
+## Commenters see everyone's comments
+
+`sentences: { commenters_see_comments: "on" }` lets everyone who can comment read
+every comment here, not only their own — on a public artifact anyone may comment
+on, every visitor sees the conversation, and new comments arrive as they are made.
+Recordings still stay with the owner and editors. `"off"` keeps each commenter to
+their own; `"follow"` hands it back to the workspace. Every artifact follows its
+workspace's position until it is switched here.
 
 ## The workspace's default access
 
 `update_workspace { defaultAccess: { entries: [...] } }` sets the whole list a
 new artifact starts with, in the same entries a save takes; artifacts already
 made keep their own. `defaultAccess: { sentences: { comments_closed: "on" } }`
-sets the workspace's position, which every following artifact reads at once.
+(or `commenters_see_comments`, one sentence per call) sets the workspace's
+position, which every following artifact reads at once.
 When that reaches existing artifacts the answer is its reach — `reach.artifacts`
 — and nothing changes; the same call with `confirmReach` set to that number
 applies it and writes an entry on each artifact's log. Opening comments that way
