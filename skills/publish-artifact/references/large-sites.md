@@ -32,7 +32,9 @@ and no secret exists at any point.
    upload is used by one save.
 
 An upload not completed expires after 24 hours, and must happen in the
-workspace the save lands in (`workspace`, a handle, as on every other tool).
+workspace the save lands in (`workspace`, a handle, as on every other tool) — or pass
+`artifact` with the artifact whose next version it is for, and it is staged where that
+artifact is, however you named it.
 
 ## Bytes on the person's own device — offer a place to drop them
 
