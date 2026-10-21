@@ -8,6 +8,16 @@ router: save_artifact: files or changes, live, staged or draft.
 
 Every change to what an artifact holds is one call, `save_artifact`. It makes a new version — live (the default) or staged — or writes the artifact's draft. A version never changes once saved and nothing deletes one; the address serves exactly one version, or none.
 
+## Choose the route for the files
+
+| What you hold | What to send |
+|---|---|
+| A folder or file on disk, with `23a` installed and signed in | `23a publish <path> --to <key> --json` reads it locally; see `large-sites` for separate-stream capture. |
+| Text or binary bytes in the conversation | `files: [{path, content, encoding}]`, with binary content base64-encoded. |
+| Bytes too large to inline | Stage them with `upload_file`, then send `{path, upload}`; see `large-sites`. |
+| A file already saved in another artifact | `{path, from: "<artifact>@<version>/<path>"}` copies it on the server. `from` is an artifact reference, never a local filesystem path. |
+| Settings kept beside a site's files | Root `artifact.json`; the server validates and applies it. Existing access changes use `update_access`. |
+
 ## A new artifact
 
 1. Gather every file into `files`. Each entry is `{ path, content, encoding }`:
@@ -16,7 +26,7 @@ Every change to what an artifact holds is one call, `save_artifact`. It makes a 
    - Binary files (PNG, JPEG, fonts, …): base64 of the bytes, `encoding: "base64"`.
    - The server is remote and cannot read your sandbox or the person's disk: every file arrives inline, staged (`{ path, upload }`, see `large-sites`), copied from material (`{ path, from }`, see `library`), or as a zip (`{ archive: "<base64>" }`, expanded on arrival). With a shell on the person's own machine and the command line installed (`23a whoami` answers), `23a publish <folder> --to <key> --json` reads the folder from disk and saves it for you — see `large-sites`.
    - A page needs an entry page: `index.html`, or `entrypoint` naming another of its paths.
-2. Call `save_artifact { name, files }`. Also, only when a save makes an artifact:
+2. Call `save_artifact { name, files }`, or leave `name` in the root `artifact.json` alone when that file supplies it. An inferred HTML title or folder name must not duplicate a different configured name; an explicit name supplied both ways must agree. Also, only when a save makes an artifact:
    - `key` — a name for tools to find it by (`docs-site`): one to sixty-three lowercase letters, digits and hyphens, unique in its workspace, and part of no address, link preview, title or share link. Left out, the artifact has none — nothing is derived from `name`. Give one whenever you will save it again (see *Saving by key*); set, rename or clear it later with `update_artifact_settings { artifact, key }` (`null` clears).
    - `workspace` — a handle, to make it in a workspace the person belongs to; their own when left out.
    - `kind` — `page`, `deck`, `markdown`, `file`, or a material kind (`image`, `video`, `sound`, `font`, `theme`). Left out, it is recognised from the content: a `document` is a deck, files with an entry page a page, one markdown file markdown, any other single file a file. A markdown artifact is shown to people as a page of ours, with the crate and comments, and read by a program at the same address as the file it is. Material is made only by naming its kind (see `library`). The kind is fixed at birth: a later save whose content does not fit it is refused naming the kind.

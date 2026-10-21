@@ -53,7 +53,7 @@ goes through an upload address (below).
 
 When the shell is on the person's own machine and `23a whoami` answers with their name, the command line does every step below for you, as them: it measures the folder, uploads the large files, makes the save and prints its answer.
 
-`23a publish <folder> --to <key> --json` — `--to` names the artifact (its address, identifier or key; a key nobody holds yet makes it), so nothing is asked; the one JSON value on standard output is the save's answer, the same as the tool's. Exit code 0 is done, 1 refused (the server's sentence in `error`), 3 not signed in. `--staged` saves without making it live, `--dry-run` checks everything and writes nothing. Not installed or not signed in: use an upload address, below.
+`23a publish <folder> --to <key> --json >save.json 2>save.log` — `--to` names the artifact (its address, identifier or key; a key nobody holds yet makes it), so nothing is asked; the one JSON value on standard output is the save's answer, the same as the tool's. Exit code 0 is done, 1 refused (the server's sentence in `error`), 3 not signed in. `--staged` saves without making it live, `--dry-run` checks everything and writes nothing. Check the exit code before parsing `save.json`; progress stays in `save.log`, so keep the streams separate. Not installed or not signed in: use an upload address, below.
 
 ## Files on disk and a shell at hand — an upload address
 
