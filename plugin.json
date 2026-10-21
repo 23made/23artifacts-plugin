@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "23artifacts",
-  "version": "0.1.29",
+  "version": "0.1.30",
   "description": "Publish what you make as a live, private-by-default address — a page with its images, video, sound and scripts, a deck, or a single file — share it with exactly the people you choose, and read and answer their comments.",
   "author": {
     "name": "23made",
@@ -24,7 +24,7 @@
     "com.openai": {
       "interface": {
         "displayName": "23artifacts",
-        "shortDescription": "Publish pages, decks and files as private live links",
+        "shortDescription": "Publish private live links",
         "longDescription": "23artifacts publishes what you make with your assistant — a page with its images, video, sound and scripts, a deck, or a single file — at a live address that is private until you share it. Choose exactly who can open it, and let people comment on the page itself; your assistant reads the comments, makes the changes and answers them. The plugin brings the 23artifacts connector and a skill that knows the platform: your workspace's themes, its real screenshots and logos, access, decks, large sites and the comment loop.",
         "developerName": "23made",
         "category": "Productivity",
@@ -33,6 +33,7 @@
           "Write"
         ],
         "websiteURL": "https://23artifacts.com",
+        "supportURL": "https://23artifacts.com/support",
         "privacyPolicyURL": "https://23artifacts.com/privacy",
         "termsOfServiceURL": "https://23artifacts.com/terms",
         "defaultPrompt": [
