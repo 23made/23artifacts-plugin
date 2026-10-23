@@ -42,7 +42,17 @@ The answer carries `facets` — for kind, access, state, has and tag, every valu
 
 Use `q` for a question, `artifact` for a single reference, and singular `path` for one file: `get_artifact_files { artifact: "launch-plan", path: "index.html" }`. Identity in MCP list/get replies uses `id` for the public identifier; REST and CLI listings use `publicId` for that identifier and `id` for a store id. A save's `id` is the public identifier on both doors. Prefer the returned address when crossing surfaces. A key names an artifact inside its workspace; `slug` is the legacy long-address label, and `key:` is today's search term.
 
-Relative artifact spans are `7d`, `30d`, `90d` and `1y`; for another window, pass explicit dates such as `touched:2026-10-01..2026-10-02` with `tz` for the person's day. If a connected client's cached schema disagrees with today's server, reconnect and list the current tools before retrying; an old tool name remains retired.
+Relative artifact spans are `7d`, `30d`, `90d` and `1y`; for another window, pass explicit dates such as `touched:2026-10-01..2026-10-02` with `tz` for the person's day.
+
+## Recovering a failed call
+
+An unexpected read failure permits one retry. If it fails again, stop and report the tool name, time and safe error code. A validation or permission refusal needs its stated correction; retrying unchanged arguments does not correct it. Preserve the code the connection returned: a generic `INVALID_ARGUMENT` does not establish that a snapshot is stale.
+
+For disconnected or expired authorization, reconnect once through the host's normal sign-in flow and list the current tools. If its schema still disagrees with the server, start a fresh host session; an old tool name remains retired. Stop after another refusal. Keep credentials in the host's normal authorization flow.
+
+A timeout, lost reply, client parse failure or unexpected write error leaves the outcome unconfirmed: the write may have completed. Before repeating it, inspect the intended artifact and its versions, draft revision, settings, access, comments or work item, as appropriate. For a save, find its artifact by the original workspace and key or returned address, then compare the intended content with the version's file digests. A save without an artifact or key creates a new artifact every time; a name alone is not a safe retry target. If readback establishes that the requested change already landed, report that result. If it establishes that the change did not land, repeat only the original authorized change. If the outcome remains unclear, stop and report it.
+
+An already-authorized CLI or request-based client may inspect the outcome within its existing scopes. Use the same artifact address and workspace. Recovery does not require a new credential, a cached token extracted from another host, or a change to the artifact's access policy. A publish-only credential cannot read private source; if its available metadata cannot resolve the outcome, stop.
 
 ## Reading
 
