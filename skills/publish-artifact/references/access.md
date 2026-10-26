@@ -177,3 +177,7 @@ bare URL stays `generic` — or the reverse; `null` follows the artifact's.
 A level change applies within seconds, but chat apps cache one card per URL —
 already-posted messages keep the card they got. The authored `custom` fields are
 kept when you switch away from `custom`, so switching back is cheap.
+
+## Large access lists
+
+Access reads and change acknowledgements follow the bounded access/workspace continuation in the `managing` guide. Use a returned read cursor with the named read tool; never repeat a mutation to collect its next page. A `canonical-json-pointer` reference selects complete raw JSON from the existing authenticated REST read and requires target, canonical selected-value length and digest verification before reconstruction. A partial page is not a complete policy to write back.

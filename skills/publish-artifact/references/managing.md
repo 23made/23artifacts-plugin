@@ -104,6 +104,46 @@ One question serves all three, `q` in the log's terms: `when:` (`1h`, `6h`, `24h
 - `members` invites (`invite: [{email, role}]`, role `member` or `admin`), removes (`remove: [email]`), changes roles (`roles: [{email, role}]`, `owner`, `admin` or `member`) and cancels invitations (`cancel: [email]`) — the owners' and admins' act; only an owner makes or touches an owner, and a workspace keeps one. An invitee joins only when they accept the email, and an account sends at most 50 invitations a day. Confirm an invitation's address with the person before sending it.
 - `defaultAccess` is the list a new artifact starts with and the workspace's position on closing comments — the `access` guide has both, and the reach a position is answered with first.
 
+## Bounded access and workspace reads
+
+`get_access` and `get_workspace` return `totals`, `offsets`, `firstPage`, `nextCursor` and `deferredItems` when a view is paged. Continue with the returned `readScope.tool` and `readScope.arguments`, adding `cursor: nextCursor`; keep the read selection identical and concatenate each collection in order until the cursor is null. A page is not a whole access list or replacement settings. An invalid selector requires a fresh read; a changed source requires discarding the collected view and restarting. A write returns its acknowledgement once; continue its state through the named **read**, never by repeating `update_access` or `update_workspace`. A summarized acknowledgement says it is summarized and gives its counts; newly created links remain complete.
+
+A `canonical-json-pointer` reference uses an existing authenticated REST JSON read. Preserve the original effective reader, credential workspace and explicit share authority; another credential for the same person is not automatically equivalent. Claimed workspace handles are explicit in the URL. For an unclaimed Personal workspace, use the same original context and verify the response identifies that Personal workspace. Fetch through the configured API client, select `pointer` from the **raw, unquoted** response, canonicalize that selected value, and verify `bytes` and `sha256` before reconstructing it. Those numbers describe the selected canonical value, **not the HTTP body's bytes**. This differs from `canonical-json` and raw-file references, whose existing exact-wire checks remain unchanged. A missing pointer, wrong public target or digest mismatch leaves the view incomplete: discard it and restart. A matching selected-value digest alone says nothing about the generation of other parts of the view. Never replace stored settings with a partial object or execute downloaded strings as code.
+
+This verifier operates on JSON already fetched with that matching authorized client. An empty pointer selects the whole JSON value. Keep the source as data:
+
+```js
+// canonical-json-pointer verifier
+async function verifyJsonPointer(source, ref) {
+  if (ref.representation !== "canonical-json-pointer") throw new Error("Wrong representation");
+  if (!ref.target?.artifact && !ref.target?.workspace) throw new Error("Missing target");
+  if (!Number.isSafeInteger(ref.bytes) || ref.bytes < 0 || !/^[0-9a-f]{64}$/.test(ref.sha256)) throw new Error("Invalid digest facts");
+  if (ref.target?.artifact && (typeof ref.target.artifact !== "string" || source?.id !== ref.target.artifact)) throw new Error("Wrong artifact");
+  if (ref.target?.workspace) {
+    const expected = ref.target.workspace;
+    if (!["personal", "organization"].includes(expected.kind) || !(expected.handle === null || (typeof expected.handle === "string" && expected.handle.length > 0))) throw new Error("Invalid workspace target");
+    if (source?.workspace?.handle !== expected.handle || source?.workspace?.kind !== expected.kind) throw new Error("Wrong workspace");
+  }
+  let value = source;
+  if (typeof ref.pointer !== "string" || (ref.pointer !== "" && !ref.pointer.startsWith("/"))) throw new Error("Invalid pointer");
+  for (const segment of ref.pointer === "" ? [] : ref.pointer.slice(1).split("/")) {
+    if (/~(?![01])/.test(segment)) throw new Error("Invalid pointer escape");
+    const key = segment.replace(/~1/g, "/").replace(/~0/g, "~");
+    if (value === null || typeof value !== "object" || !Object.hasOwn(value, key)) throw new Error("Missing pointer");
+    if (Array.isArray(value) && !/^(0|[1-9][0-9]*)$/.test(key)) throw new Error("Invalid array index");
+    value = value[key];
+  }
+  const json = JSON.stringify(value, (_key, cell) => cell && typeof cell === "object" && !Array.isArray(cell)
+    ? Object.fromEntries(Object.entries(cell).sort(([a], [b]) => a < b ? -1 : a > b ? 1 : 0)) : cell);
+  const bytes = new TextEncoder().encode(json);
+  const digest = Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256", bytes)), x => x.toString(16).padStart(2, "0")).join("");
+  if (bytes.length !== ref.bytes || digest !== ref.sha256) throw new Error("Changed selected value; restart the read");
+  return value;
+}
+```
+
+The sharing/workspace panel receives its complete authorized UI data separately. Its rendered controls are not reconstructed from a partial model page. The existing REST and released CLI responses keep their complete shapes; no new credential or command is needed.
+
 ## Credentials
 
 `create_credential { kind, … }` / `revoke_credential { id }` — what software acts through:
