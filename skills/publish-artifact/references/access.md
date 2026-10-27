@@ -147,12 +147,13 @@ shouldn't have to sign in. It is an entry on the list:
 A share link is a bearer credential: anyone holding it has what its role gives,
 so treat it as a secret and revoke it when the audience changes. Roles are read
 fresh on every request, so lowering or revoking a link takes effect within
-seconds. `get_access` lists each link with `views` (opens by people) and
-`previews` (a chat or mail client fetching its card — the link was pasted, not
-followed); without an `artifact`, every share link in the workspace, each naming
-its artifact. `notify: true` mails the link's maker when a person opens it — a
-chat or mail client fetching the card never counts, and a busy link mails at
-most once per quarter hour.
+seconds.
+
+`get_access { artifact }` returns existing links to the model as `linkSummaries`: their ids, names, roles, preview settings, counts and dates, without bearer URLs. `views` counts opens by people; `previews` counts a chat or mail client fetching the card — pasted, not followed. Without `artifact`, it lists the workspace's links, each naming its artifact. When you need the actual URLs, use `get_access { artifact, includeLinkUrls: true }`, or `{ workspace, includeLinkUrls: true }` for the workspace. That returns full `links` under the same owner/admin authority. `update_access` returns summaries of existing links and complete newly created `newLinks`; it has no URL-inclusion selector. The interactive sharing panel retains its authorized Copy link and embed controls.
+
+These collections can page. Continue with the result's `readScope.tool` and `readScope.arguments`, adding the returned `nextCursor` as `cursor`; do not change the URL selector between pages. Counts and offsets use `linkSummaries` for summaries and `links` for full links. A partial page is not the whole access list. Summary reads never fall back to raw whole-state or link-collection references that would reconstruct unrequested URLs. The `managing` guide explains complete-item retrieval and stale snapshots.
+
+`notify: true` mails the link's maker when a person opens it — a chat or mail client fetching the card never counts, and a busy link mails at most once per quarter hour.
 
 ## Link previews
 
