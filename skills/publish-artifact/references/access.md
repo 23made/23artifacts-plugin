@@ -29,7 +29,10 @@ change its role. The kinds:
   Editor; the owner lowers or removes it like any other entry.
 - `anyone` — anyone with the address, no sign-in: the artifact is **public**. It
   stands alone — adding it removes the other entries, and adding any other entry
-  ends it being public — and its role is viewer or commenter, never editor.
+  ends it being public — and its role is viewer or commenter, never editor. A
+  public artifact starts out of search: its address asks search engines not to
+  index it until its owner sets `search: "listed"` (`update_artifact_settings`),
+  and ending it being public takes the listing away.
 - `workspace` — everyone at the owning organization (org-owned artifacts only).
 - `verified` — anyone who can verify an email address; it cannot sit beside named
   addresses, domains or a pattern.

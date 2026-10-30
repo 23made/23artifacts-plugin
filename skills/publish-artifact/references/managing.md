@@ -76,10 +76,11 @@ An anonymous HTTP request to a private address can receive a successful HTTP res
 - `tags` replaces the list, or `addTags` and `removeTags` change it;
 - `library` — `true` puts it in the workspace's library, `false` takes it out;
 - `room` — `on`, `off` (keeps what it holds) or `wipe`; `crate` — `shown` or `hidden`;
+- `search` — `listed` or `unlisted`: a public artifact is out of search until its owner lists it, and only a public one can be listed;
 - `agentPolicy` — `workspace` (as the workspace says), `approval` or `live`: whether an agent's work goes live without a person;
 - `previewImage: "retry"` — one more attempt at a live version's preview image that was given up; the owner's.
 
-Pass `artifacts` — up to 50 — instead of `artifact` to change the settings several can share: tags, the library, the room, the crate, the agent policy. A name, a key or a description is one artifact's. Renaming, keying, describing, tagging and the library need Edit; the rest are the owner's; nothing changes unless all of it may, on every artifact named. The same settings travel with the files as `artifact.json` at a save's root (see `publishing`). The answer is the settings after, per artifact, each change in a sentence — an open room is writable by anyone who can open the artifact.
+Pass `artifacts` — up to 50 — instead of `artifact` to change the settings several can share: tags, the library, the room, the crate, the listing, the agent policy. A name, a key or a description is one artifact's. Renaming, keying, describing, tagging and the library need Edit; the rest are the owner's; nothing changes unless all of it may, on every artifact named. The same settings travel with the files as `artifact.json` at a save's root (see `publishing`). The answer is the settings after, per artifact, each change in a sentence — an open room is writable by anyone who can open the artifact.
 
 ## The log
 
