@@ -81,6 +81,15 @@ A key left out leaves its setting as it is. A key equal to what is stored change
 
 Refused whole, writing nothing: the file in a save `as: "draft"` (settings are the artifact's, never the draft's); a file that is not one JSON object; a key outside the list above, named, with the keys it takes — theme, domain and provenance are not among them yet; a value its setting refuses, in that setting's words; a change the saver may not make. A backup's artifact folder holds the file in this shape, so that folder saved back as it stands changes nothing.
 
+## Redirects and headers: `_redirects` and `_headers`
+
+Two files at the root of what a save makes are read as the artifact's own rules, in the part of Netlify's and Cloudflare Pages' syntax both read. Unlike `artifact.json` they stay in the version, so each version keeps its own, and neither is served at its own path.
+
+- **`_redirects`**, one rule a line, `#` for a comment: `from to [status][!]`. `from` is a path; `:name` matches one segment and a final `*` the rest. `to` is a path, which may use `:name` and `:splat`, or an `https://` address for a redirect. Status `301`, `302` (when none is given), `303`, `307` or `308` redirects; `200` answers with `to`'s file at the address asked for, and `404` does the same as not found. A real file wins: a rule answers only a path the artifact has no file for, unless its status ends `!` — so `/* /index.html 200` serves an app's routes and leaves its scripts and images alone. The first rule that matches is the only one. A redirect carries the visitor's query when `to` names none, never a share link's token. At most 2,000 rules without a placeholder or `*` and 100 with one; 1,000 characters a line.
+- **`_headers`**: a path line (same patterns), then indented `Name: value` lines it adds to every file of the artifact it matches. A file may set `Content-Security-Policy` (sent beside ours, so it only narrows), `Permissions-Policy`, the three `Cross-Origin-*-Policy` headers, `X-Frame-Options`, `X-Robots-Tag` (beside ours: it never lifts `noindex`), `Content-Disposition`, `Content-Language`, `Link`, and custom `X-` headers. Cookies, caching, cross-origin reading and content type stay ours; so does removing a header (`! Name`). At most 100 blocks; 2,000 characters a line.
+
+They act after the gate, so someone not let in never sees where a path leads. A line either file cannot read refuses the save, naming the file, the line and why, and writes nothing — `validate: true` checks them too. A draft's are read when it is published. A version saved before these files were read keeps them as ordinary files.
+
 ## Things refused by name
 
 - An existing artifact's `name`, `description`, `tags`, `kind`, `key` and `workspace` are not a save's fields to change — a save naming it by `artifact` with any of them is refused (one reaching it by `key` keeps them as stored, above): settings change with `update_artifact_settings` or an `artifact.json` (above), access and the link preview with `update_access`. A save may pass the `access` and `preview` already stored; a different one is refused.
