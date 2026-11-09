@@ -14,6 +14,7 @@ Every artifact can have ONE shared JSON blob — its "room" — that the artifac
 - Inside a share embed (`/__share/<token>/…`), reach the room at the **relative** path `__room` so the request stays under the token prefix.
 - Limits: 256 KB per room, ~30 writes/min per viewer. Anyone who can view the artifact can write its room — for sensitive state, encrypt client-side with a key kept in the URL fragment (the server then holds only ciphertext).
 - Owner tools: `get_room` (inspect/export what viewers wrote); `update_artifact_settings` with `room: "wipe"` (empty it) or `room: "off"` (the kill switch, keeping what it holds).
+- A room too large for one answer comes back from `get_room` with `partial: true`, `data: null` and `dataRead`: a `canonical-json-pointer` reference to `GET /api/v1/artifacts/{artifact}/room`. Fetch it under the same sign-in, select `/data`, and check its canonical bytes and SHA-256 before using it (the managing guide shows the check). `data: null` beside `partial` means not shown, never empty.
 
 ## Live updates & presence (no polling needed)
 
