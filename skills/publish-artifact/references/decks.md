@@ -161,7 +161,7 @@ material that replaced it.
 
 ```json
 "assets": { "brand-600": "asset:inter-600" },
-"fonts":  [{ "family": "Inter", "asset": "brand-600", "weight": 600 }]
+"fonts":  [{ "family": "Inter", "asset": "brand-600", "weight": "600" }]
 ```
 
 Add it once and every deck you make can have it. Inlining the woff2 as a

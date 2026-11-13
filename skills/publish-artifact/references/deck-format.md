@@ -319,7 +319,7 @@ override it.
 
   ```json
   "assets": { "brand-600": "asset:inter-600" },
-  "fonts":  [{ "family": "Inter", "asset": "brand-600", "weight": 600 }]
+  "fonts":  [{ "family": "Inter", "asset": "brand-600", "weight": "600" }]
   ```
 
   Then `"fontFamily": "Inter, system-ui, sans-serif"` renders in the real face
