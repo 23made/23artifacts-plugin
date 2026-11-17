@@ -41,6 +41,8 @@ Every change to what an artifact holds is one call, `save_artifact`. It makes a 
 
 Pass `artifact` — its address, its identifier or its key, whichever you hold — and the content, in one of three forms:
 
+Use `artifact` or `key`, never both: `{ artifact, files }` names an existing artifact, while `{ key, files }` creates it once and versions it thereafter. Leave out `key` even when it equals the stored key; renaming or clearing that setting is `update_artifact_settings { artifact, key }`.
+
 - **The whole of it:** `files` (or `document`, for a deck or a theme). The version holds exactly what you send. The answer's `leftOut` lists every path the version it replaces had and this one does not (the first 50, then `more`), so nothing is ever dropped without saying so; leaving out the entry page is refused unless you name a new `entrypoint`.
 - **Changes on a base:** `base` — a version number, `"live"` or `"draft"` — with `changes`, applied on the server; every file you do not name is carried over by digest, moving no bytes. A change is `{ path, content, encoding }` (written whole), `{ path, upload }`, `{ path, from }`, `{ path, remove: true }`, or `{ path, replace: { old, new, all? } }` — a text edit inside the file, where `old` must occur exactly once unless `all: true`. At most 2,000 changes. This is the way to change a few files of a big site: it cannot drop the rest.
 - **A base alone:** `base` and nothing else saves that version's content again as the newest — the way to bring an earlier version back as a new one, or to make the draft a version.
