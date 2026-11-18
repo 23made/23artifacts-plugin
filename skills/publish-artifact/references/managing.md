@@ -63,7 +63,7 @@ For a metadata manifest use `download: true`; follow `nextCursor` with the same 
 
 ## Verify a private publish
 
-Start with the save's version, `whoCanOpen` and per-file `sha256` values. Compare the digests with the intended files, accounting for any photograph metadata removal the save reports. When source readback is needed, `get_artifact_files { artifact, version: <saved number>, path: "index.html" }` reads that exact version through your existing access, and `get_access` verifies the policy. A publish-only credential cannot read private source; it can verify the save's returned digests.
+For a routine publish, confirm from the save result. Read access or files separately when asked or if the save lacks a required fact. For explicit verification, start with the save's version, `whoCanOpen` and per-file `sha256` values. Compare the digests with the intended files, accounting for any photograph metadata removal the save reports. When source readback is needed, `get_artifact_files { artifact, version: <saved number>, path: "index.html" }` reads that exact version through your existing access, and `get_access` verifies the policy. A publish-only credential cannot read private source; it can verify the save's returned digests.
 
 An anonymous HTTP request to a private address can receive a successful HTTP response containing a sign-in gate. Check that the response excludes a distinctive marker from the artifact's body; status 200 alone proves neither that artifact bytes were returned nor that the artifact is public. Keep the policy unchanged while verifying it. Public browser rendering and authenticated source integrity are separate checks.
 
@@ -100,7 +100,7 @@ One question serves all three, `q` in the log's terms: `when:` (`1h`, `6h`, `24h
 
 ## Workspaces
 
-`get_workspace { workspace? }` / `update_workspace { workspace?, handle?, defaultAccess?, confirmReach?, defaultTheme?, agentPolicy?, members? }` — the workspace as its page shows it: its plan against each limit, its defaults, its members and waiting invitations, and the credentials acting in it — and changing them.
+`get_workspace { workspace?, showPanel? }` / `update_workspace { workspace?, handle?, defaultAccess?, confirmReach?, defaultTheme?, agentPolicy?, members? }` — the workspace as its page shows it: its plan against each limit, its defaults, its members and waiting invitations, and the credentials acting in it — and changing them. Read publishing defaults with `showPanel: false` when the person did not ask to see workspace settings.
 
 - `handle` is the personal workspace's short name, like a username — how its work is credited, mentioned and found. No address carries it: every artifact's address is its own identifier, so a new handle moves no link. It changes at most once a day, and reserved names are refused; an organization's is set by an owner or admin on its page.
 - `defaultTheme` — the theme new artifacts are built in, by its address, identifier or key — the workspace's own first, then ours — (`@<version>` to pin), or `null` to leave the design to the agent. See `themes`.

@@ -13,7 +13,7 @@ Everything here runs through the **23artifacts** MCP connector (`https://mcp.23a
 
 ## Read this first, in this order
 
-**The look is yours unless a theme is named.** A workspace either leaves the design to you — the starting value, *let the agent decide* — or has a default theme, which you use unless the user asks for another look; `get_workspace` says which, and so does `list_artifacts` with `q: "kind:theme"`. When the user names a theme ("the RapidAI theme", "our house theme"), use that one. With no default and no name, design what suits the artifact; picking one of the workspace's themes is yours to choose when you have nothing better to go on.
+**The look is yours unless a theme is named.** A workspace either leaves the design to you — the starting value, *let the agent decide* — or has a default theme, which you use unless the user asks for another look; `get_workspace { showPanel: false }` says which without opening settings, and so does `list_artifacts` with `q: "kind:theme"`. When the user names a theme ("the RapidAI theme", "our house theme"), use that one. With no default and no name, design what suits the artifact; picking one of the workspace's themes is yours to choose when you have nothing better to go on.
 
 **Real material beats a stand-in.** If the user has a screenshot, a logo or a clip of the thing you're describing, `list_artifacts` with `q: "in:library"` finds it; use it instead of inventing a placeholder.
 
