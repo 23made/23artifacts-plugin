@@ -19,7 +19,7 @@ Material is artifacts: an image, a video, a sound, a font or a theme is an artif
 - words — matching the name, the tags and the description of what an image shows (`dashboard dark`, `"logo on white"`);
 - `tag:`, `-tag:old`, `touched:30d`, `sort:`.
 
-A listing holds material only when the question asks for it (`in:`, `kind:` or `format:`). Each row names the material by its address and identifier, with its kind, its live version and its tags; `facets` count kind, tag and the rest. Where the client shows interactive surfaces, the library comes as a picker the person can choose from; what they pick is told to you by reference.
+A listing holds material only when the question asks for it (`in:`, `kind:` or `format:`). Each row names the material by its address and identifier, with its kind, its live version and its tags; `facets` count kind, tag and the rest.
 
 ## Using material in a save
 
