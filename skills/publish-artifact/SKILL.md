@@ -19,7 +19,7 @@ Everything here runs through the **23artifacts** MCP connector (`https://mcp.23a
 
 **Then save.** The minimum is `save_artifact { name, files }`: a new artifact, live at its one address, `<id>.23a.so`. Something you will publish again — a build, a report, a docs folder — takes a `key` (`save_artifact { key: "docs-site", files }`): the first save makes it, and every later save with the same key in that workspace is its next version.
 
-**When 23artifacts gets in your way, say so.** `send_feedback` tells the people who run 23artifacts — `friction`, a `bug` or an `idea`, what happened in your own words, and the `tool` and `error` when a call went wrong. Send it when the user asks ("tell 23artifacts this is confusing"), and on your own when the product got in your way: a refusal that didn't say what to do, a capability it lacked, a workaround you needed. When you send on your own, tell the user in one line, with the reference it answers. Never include an artifact's contents or anyone's personal details.
+**Feedback about 23artifacts itself goes to the people who run it.** `send_feedback` tells them — `friction`, a `bug` or an `idea`, what happened in your own words, and the `tool` and `error` when a call went wrong. Send it when the user asks ("tell 23artifacts this is confusing"), and give them the reference it answers. Never include an artifact's contents or anyone's personal details.
 
 ## Guides
 
